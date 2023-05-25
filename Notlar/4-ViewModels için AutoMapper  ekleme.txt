@@ -1,0 +1,23 @@
+1-ViwModellerimizi Modelimiz kullanarak otomatik dönüştürme yapmak için aşağıdaki paket yüklenir.
+dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 12.0.1
+2-Program.cs dosyasına aşağıdaki kod eklenir...(builder.Build() kodundan önce)
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+3-Daha sonra projemize Mapping klasörü ekleyip klasörün içerisine ViewModelMapping.cs
+sınıfı eklenir ve Profile sınıfından miras alınır.
+4-Daha sonra CreateMap() metodu kullanılarak Product entitysi 
+ProductViewModele constructur'da(yapıcı metodunda) dönüştürülür.
+
+ public ViewModelMapping()
+        {
+            CreateMap<Product,ProductViewModel>().ReverseMap();
+        }
+        
+5-Product Controllere gidip en üst tarafona aşağıdaki Imapper değişkeni oluturulur.
+ private readonly IMapper _mapper;
+ Daha sonra Product Controlleren yapıcı metodu aşağıdaki gibi değiştirlir.
+
+  public ProductsController(ShopContext context,IMapper mapper)
+        {
+            this.veritabanim = context;
+            _mapper=mapper;
+        }
